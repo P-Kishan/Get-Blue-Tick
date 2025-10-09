@@ -14,25 +14,26 @@ function Register() {
     const data = { username, password };
 
     try {
-      const response = await fetch("http://localhost:8000/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+  const response = await fetch("http://localhost:8000/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
 
-      const result = await response.json();
+  const result = await response.json();
 
-      if (result.status === "success") {
-        localStorage.setItem("isLoggedIn", "true");
-        setMessage("✅ Account created successfully!");
-        navigate("/freenot");
-      } else {
-        setMessage("❌ Failed to create account!");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("⚠️ An error occurred!");
-    }
+  if (result.status === "success") {
+    localStorage.setItem("isLoggedIn", "true");
+    setMessage("✅ Account created successfully!");
+    navigate("/freenot");
+  } else {
+    setMessage("❌ Failed to create account!");
+  }
+} catch (error) {
+  console.error("Error:", error);
+  setMessage("⚠️ An error occurred!");
+}
+
   };
 
   return (

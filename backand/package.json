@@ -1,4 +1,8 @@
 {
+  "scripts": {
+  "start": "node server.js",
+  "vercel-build": "echo 'No build step required'"
+  },
   "name": "001",
   "version": "1.0.0",
   "main": "index.js",
@@ -14,7 +18,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongodb": "^6.20.0",
-    "mongoose": "^8.18.1",
+    "mongoose": "^8.19.0",
     "react-scripts": "^5.0.1"
   }
 }

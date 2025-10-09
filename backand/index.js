@@ -1,36 +1,48 @@
-let express = require('express');   
-const cors = require("cors");
-const {checkToken} = require('./Middleware');
-const {pass} = require('./Middleware');   
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
 const dbConnection = require('./dbConnection');
 
 const app = express();
 app.use(express.json());
-app.use(cors()); 
+app.use(cors());
 
-/* app.use(checkToken);
-app.use(pass); */
+// ✅ Connect to DB at startup
+dbConnection();
 
+// ✅ Define schema & model ONCE
+const studentSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+});
+const Student = mongoose.model('Student', studentSchema);
+
+// ✅ Test route
 app.get('/', (req, res) => {
   res.send('Hello World');
-})
+});
+
 
 app.post('/register', async (req, res) => {
-  let mydb=await dbConnection();
-  let studentCollection = mydb.collection('students');
-  let obj = {
-    username: req.body.username,
-    password: req.body.password
+  try {
+    const obj = {
+      username: req.body.username,
+      password: req.body.password,
+    };
+
+    const result = await Student.create(obj);
+
+    res.json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error inserting student:", error);
+    res.status(500).json({ status: "failed", error: error.message });
   }
-  let result = await studentCollection.insertOne(obj);
+});
 
-  let regobj = {
-    status: "success",
-    data: result
-  }
-  res.json(regobj);
-  
-})
-
-
-app.listen("8000")
+// ✅ Start server
+app.listen(8000, () => {
+  console.log("Server running on port 8000");
+});

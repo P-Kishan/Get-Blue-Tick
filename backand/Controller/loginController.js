@@ -1,17 +1,22 @@
-const datamodel = require('../Models/LoginModel');
+const Student = require('../models/studentModel');
 
-let login = async (req, res) => {
+const registerStudent = async (req, res) => {
   try {
-    let { username, password } = req.body;
-    let studentCollection = new datamodel({ username, password });
-    await studentCollection.save();
-    res.json({ status: "success", message: "Data Received" });
-  } catch (err) {
-    console.error(err); // This will show the exact error in the terminal
-    res.status(500).json({ status: "error", message: err.message });
+    const obj = {
+      username: req.body.username,
+      password: req.body.password,
+    };
+
+    const result = await Student.create(obj);
+
+    res.json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error inserting student:", error);
+    res.status(500).json({ status: "failed", error: error.message });
   }
-}
+};
 
-
-  
-module.exports = { login };
+module.exports = { registerStudent };
